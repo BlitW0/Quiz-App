@@ -6,8 +6,9 @@ import NewPerson from './NewPerson';
 import Home from './Home';
 import NewUser from './NewUser';
 import Login from './Login';
-import Quizzes from './Quizzes'
-import ViewUsers from './ViewUsers'
+import Quizzes from './Quizzes';
+import ViewUsers from './ViewUsers';
+import DeleteUser from './DeleteUser';
 
 
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
@@ -26,7 +27,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(localStorage.getItem("type") == 1);
     return (
       <div>
         <Router>
@@ -47,6 +47,7 @@ class App extends Component {
 
                     localStorage.getItem("type") == 1 ?
                       <ul className="nav navbar-nav navbar-right">
+                        <li><Link to={'DeleteUser'}>Delete a User</Link></li>
                         <li><Link to={'/ViewUsers'}>View All Users</Link></li>
                         <li><Link to={'/Quizzes'}>{localStorage.getItem("username")}</Link></li>
                         <li><Link to={'/'} onClick={this.Logout}>Logout</Link></li>
@@ -78,6 +79,7 @@ class App extends Component {
                  <Route exact path='/Login' component={Login}/>
                  <Route exact path='/Quizzes' component={Quizzes}/>
                  <Route exact path='/ViewUsers' component={ViewUsers}/>
+                 <Route exact path='/DeleteUser' component={DeleteUser}/>
             </Switch>
           </div>
         </Router>

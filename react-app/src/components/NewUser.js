@@ -77,7 +77,7 @@ class NewUser extends Component {
       return (
         <div>
           <Redirect to='/Login'/>
-          <Route exact path='/Login' Component={Login}/>
+          <Route exact path='/Login' component={Login}/>
         </div>
       );
     }

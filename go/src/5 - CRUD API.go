@@ -35,13 +35,14 @@ func main() {
 	}
 	defer db.Close()
 
-	db.DropTableIfExists(&User{})
+	// db.DropTableIfExists(&User{})
 	db.AutoMigrate(&Person{}, &User{})
 	r := gin.Default()
 
 	r.GET("/users/", GetUsers)
 	r.POST("/users", CreateUser)
 	r.POST("/checkuser", GetUser)
+	r.DELETE("users/:id", DeleteUser)
 
 	// r.GET("/people/", GetPeople) // Creating routes for each functionality
 	// r.GET("/people/:id", GetPerson)
@@ -142,6 +143,15 @@ func GetUser(c *gin.Context) {
 			c.JSON(350, "")
 		}
 	}
+}
+
+func DeleteUser(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var user User
+	d := db.Where("id = ?", id).Delete(&user)
+	// fmt.Println(d)
+	c.Header("access-control-allow-origin", "*")
+	c.JSON(200, gin.H{"id #" + id: "deleted"})
 }
 
 // func GetPerson(c *gin.Context) {
