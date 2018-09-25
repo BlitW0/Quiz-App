@@ -28,6 +28,12 @@ type User struct {
 	Type     uint   `json:"type"`
 }
 
+type Quiz struct {
+	ID    uint   `json:"id"`
+	Name  string `json:"name"`
+	Genre string `json:"genre"`
+}
+
 func main() {
 	db, err = gorm.Open("sqlite3", "./gorm.db")
 	if err != nil {
@@ -36,13 +42,18 @@ func main() {
 	defer db.Close()
 
 	// db.DropTableIfExists(&User{})
-	db.AutoMigrate(&Person{}, &User{})
+	db.AutoMigrate(&Person{}, &User{}, &Quiz{})
+
 	r := gin.Default()
 
 	r.GET("/users/", GetUsers)
 	r.POST("/users", CreateUser)
 	r.POST("/checkuser", GetUser)
 	r.DELETE("users/:id", DeleteUser)
+
+	r.GET("/getquizzes", GetQuizzes)
+	r.DELETE("/quiz/:id", DeleteQuiz)
+	r.POST("/addquiz", CreateQuiz)
 
 	// r.GET("/people/", GetPeople) // Creating routes for each functionality
 	// r.GET("/people/:id", GetPerson)
@@ -149,9 +160,49 @@ func DeleteUser(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var user User
 	d := db.Where("id = ?", id).Delete(&user)
-	// fmt.Println(d)
+	fmt.Println(d)
 	c.Header("access-control-allow-origin", "*")
 	c.JSON(200, gin.H{"id #" + id: "deleted"})
+}
+
+func GetQuizzes(c *gin.Context) {
+	var quizzes []Quiz
+	if err := db.Find(&quizzes).Error; err != nil {
+		c.AbortWithStatus(404)
+		fmt.Println(err)
+	} else {
+		c.Header("access-control-allow-origin", "*") // Why am I doing this? Find out. Try running with this line commented
+		c.JSON(200, quizzes)
+	}
+}
+
+func DeleteQuiz(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var quiz Quiz
+	d := db.Where("id = ?", id).Delete(&quiz)
+	fmt.Println(d)
+	c.Header("access-control-allow-origin", "*")
+	c.JSON(200, gin.H{"id #" + id: "deleted"})
+}
+
+func CreateQuiz(c *gin.Context) {
+	var quiz Quiz
+	c.BindJSON(&quiz)
+
+	var temp Quiz
+	if err := db.Where("name = ?", quiz.Name).First(&temp).Error; err != nil {
+
+		db.Create(&quiz)
+		c.Header("access-control-allow-origin", "*") // Why am I doing this? Find out. Try running with this line commented
+		c.JSON(200, quiz)
+	} else {
+
+		if temp.Genre == quiz.Genre {
+			c.Header("access-control-allow-origin", "*")
+			c.JSON(350, "")
+		}
+	}
+
 }
 
 // func GetPerson(c *gin.Context) {

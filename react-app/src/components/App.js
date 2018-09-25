@@ -9,7 +9,9 @@ import Login from './Login';
 import Quizzes from './Quizzes';
 import ViewUsers from './ViewUsers';
 import DeleteUser from './DeleteUser';
-
+import ViewQuizzes from './ViewQuizzes';
+import DeleteQuiz from './DeleteQuiz';
+import NewQuiz from './NewQuiz';
 
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
 
@@ -47,8 +49,11 @@ class App extends Component {
 
                     localStorage.getItem("type") == 1 ?
                       <ul className="nav navbar-nav navbar-right">
-                        <li><Link to={'DeleteUser'}>Delete a User</Link></li>
-                        <li><Link to={'/ViewUsers'}>View All Users</Link></li>
+                        <li><Link to={'/NewQuiz'}>Create Quiz</Link></li>
+                        <li><Link to={'/DeleteQuiz'}>Delete Quiz</Link></li>
+                        <li><Link to={'/ViewQuizzes'}>View Quizzes</Link></li>
+                        <li><Link to={'/DeleteUser'}>Delete User</Link></li>
+                        <li><Link to={'/ViewUsers'}>View Users</Link></li>
                         <li><Link to={'/Quizzes'}>{localStorage.getItem("username")}</Link></li>
                         <li><Link to={'/'} onClick={this.Logout}>Logout</Link></li>
                       </ul>
@@ -80,6 +85,9 @@ class App extends Component {
                  <Route exact path='/Quizzes' component={Quizzes}/>
                  <Route exact path='/ViewUsers' component={ViewUsers}/>
                  <Route exact path='/DeleteUser' component={DeleteUser}/>
+                 <Route exact path='/ViewQuizzes' component={ViewQuizzes}/>
+                 <Route exact path='/DeleteQuiz' component={DeleteQuiz}/>
+                 <Route exact path='/NewQuiz'component={NewQuiz}/>
             </Switch>
           </div>
         </Router>
