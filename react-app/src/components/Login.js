@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './NewPerson.css';
-import './Home.css';
+import Quizzes from './Quizzes';
+
+import { BrowserRouter as Route, Redirect } from 'react-router-dom';
 
 class Login extends Component {
   constructor() {
@@ -37,13 +39,17 @@ class Login extends Component {
 
             // Store username and type of user in local browser data
             localStorage.setItem("username", this.state.formData.username);
-            localStorage.setItem("type", response.status == 205 ? 1 : 0);
+
+            if (response.status === 205)
+              localStorage.setItem("type", 1);
+            else
+              localStorage.setItem("type", 0);
 
             this.setState({authenticated: true, pass_wrong: false, not_found: false});
 
             // Redirect to Quizzes page
-            this.props.history.push('/Quizzes');
-            window.location.reload();
+            // this.props.history.push('/Quizzes');
+            // window.location.reload();
 
           } else if (response.status == 350)
             this.setState({authenticated: false, pass_wrong: true, not_found: false,});
@@ -64,14 +70,15 @@ class Login extends Component {
   render() {
 
     
-    // if (this.state.authenticated === true) {
-    //   return (
-    //     <div>
-    //       <Redirect to='/Quizzes'/>
-    //       <Route exact path='/Quizzes' Component={Quizzes}/>
-    //     </div>
-    //   );
-    // }
+    if (this.state.authenticated == true) {
+      window.location.reload();
+      return (
+        <div>
+          <Redirect to={'/Quizzes'}/>
+          <Route exact path='/Quizzes' component={Quizzes} />
+        </div>
+      );
+    }
 
     return (
 

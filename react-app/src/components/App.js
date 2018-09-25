@@ -7,6 +7,7 @@ import Home from './Home';
 import NewUser from './NewUser';
 import Login from './Login';
 import Quizzes from './Quizzes'
+import ViewUsers from './ViewUsers'
 
 
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
@@ -25,6 +26,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(localStorage.getItem("type") == 1);
     return (
       <div>
         <Router>
@@ -43,10 +45,17 @@ class App extends Component {
                   {
                     "username" in localStorage ?
 
-                    <ul className="nav navbar-nav navbar-right">
-                      <li><Link to={'/Quizzes'}>{localStorage.getItem("username")}</Link></li>
-                      <li><Link to={'/'} onClick={this.Logout}>Logout</Link></li>
-                    </ul>
+                    localStorage.getItem("type") == 1 ?
+                      <ul className="nav navbar-nav navbar-right">
+                        <li><Link to={'/ViewUsers'}>View All Users</Link></li>
+                        <li><Link to={'/Quizzes'}>{localStorage.getItem("username")}</Link></li>
+                        <li><Link to={'/'} onClick={this.Logout}>Logout</Link></li>
+                      </ul>
+                    :
+                      <ul className="nav navbar-nav navbar-right">
+                        <li><Link to={'/Quizzes'}>{localStorage.getItem("username")}</Link></li>
+                        <li><Link to={'/'} onClick={this.Logout}>Logout</Link></li>
+                      </ul>
 
                     :
                     
@@ -68,6 +77,7 @@ class App extends Component {
                  <Route exact path='/NewUser' component={NewUser}/>
                  <Route exact path='/Login' component={Login}/>
                  <Route exact path='/Quizzes' component={Quizzes}/>
+                 <Route exact path='/ViewUsers' component={ViewUsers}/>
             </Switch>
           </div>
         </Router>
