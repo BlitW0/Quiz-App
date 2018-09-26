@@ -9,12 +9,15 @@ class Home extends Component {
           <h1 className="App-title">Welcome to Quiz App</h1>
         </header>
         <div>
-          <h4>
-            <br/>
-            Please login to continue.
-            <br/>
-            If you do not have an account you can sign up.
-          </h4>
+          {
+            !("username" in localStorage) && 
+            <h4>
+              <br/>
+              Please login to continue.
+              <br/>
+              If you do not have an account you can sign up.
+            </h4>
+          }
         </div>
       </div>
     );

@@ -67,6 +67,12 @@ type QJoin struct {
 	C4       bool
 }
 
+type RJoin struct {
+	Username string
+	Qid      uint
+	Score    uint
+}
+
 func main() {
 	db, err = gorm.Open("sqlite3", "./gorm.db")
 	db.Exec("PRAGMA foreign_keys = ON")
@@ -91,6 +97,11 @@ func main() {
 	r.GET("/quiz/:id", GetQuiz)
 
 	r.POST("/addques", CreateQues)
+	r.GET("/getques/:qid", GetQues)
+
+	r.GET("/getoptions/:quid", GetOptions)
+	r.POST("/addrec", AddRecord)
+	r.GET("/gettaken/:username", GetTaken)
 
 	// r.GET("/people/", GetPeople) // Creating routes for each functionality
 	// r.GET("/people/:id", GetPerson)
@@ -283,6 +294,81 @@ func CreateQues(c *gin.Context) {
 	}
 
 }
+
+func GetQues(c *gin.Context) {
+	qid := c.Params.ByName("qid")
+	var quess []Question
+
+	if err = db.Joins("JOIN quizzes ON quizzes.id = questions.qid").Where("qid = ?", qid).Find(&quess).Error; err != nil {
+		c.AbortWithStatus(404)
+		fmt.Println(err)
+	} else {
+		c.Header("access-control-allow-origin", "*") // Why am I doing this? Find out. Try running with this line commented
+		c.JSON(200, quess)
+	}
+}
+
+func GetOptions(c *gin.Context) {
+	quid := c.Params.ByName("quid")
+	var options []Option
+
+	if err = db.Joins("JOIN questions ON questions.id = options.quid").Where("quid = ?", quid).Find(&options).Error; err != nil {
+		c.AbortWithStatus(404)
+		fmt.Println(err)
+	} else {
+		c.Header("access-control-allow-origin", "*") // Why am I doing this? Find out. Try running with this line commented
+		c.JSON(200, options)
+	}
+}
+
+func AddRecord(c *gin.Context) {
+	var inp RJoin
+	c.BindJSON(&inp)
+
+	var user User
+	fmt.Println(inp)
+	db.Where("username = ?", inp.Username).First(&user)
+
+	var tmp Record
+	if err = db.Joins("JOIN users ON users.id = records.uid").Joins("JOIN quizzes ON quizzes.id = records.qid").Where("records.uid = ?", user.ID).First(&tmp).Error; err == nil {
+		c.Header("access-control-allow-origin", "*")
+		c.JSON(350, "")
+	} else {
+		record := Record{Qid: inp.Qid, Uid: user.ID, Score: inp.Score}
+		// fmt.Println(record)
+		db.Create(&record)
+		c.Header("access-control-allow-origin", "*") // Why am I doing this? Find out. Try running with this line commented
+		c.JSON(200, &record)
+	}
+}
+
+func GetTaken(c *gin.Context) {
+	username := c.Params.ByName("username")
+
+	type Taken struct {
+		Name  string
+		Score uint
+	}
+
+	var taken []Taken
+	// var rec []Record
+	err := db.Raw("SELECT quizzes.name, records.score FROM quizzes, records, users WHERE users.id = records.uid AND records.qid = quizzes.id AND users.username = ?", username).Scan(&taken).Error
+
+	// err = db.Joins("JOIN users ON users.id = records.uid").Joins("JOIN quizzes ON quizzes.id = records.quid").Where("users.username = ?", username).Find(&rec);
+
+	if err != nil {
+		c.AbortWithStatus(404)
+		fmt.Println(err)
+	} else {
+		// fmt.Println(rec)
+		c.Header("access-control-allow-origin", "*") // Why am I doing this? Find out. Try running with this line commented
+		c.JSON(200, taken)
+	}
+}
+
+// func GetTaken(c *gin.Context) {
+// 	var taken []Record
+// }
 
 // func GetPerson(c *gin.Context) {
 // 	id := c.Params.ByName("id")
