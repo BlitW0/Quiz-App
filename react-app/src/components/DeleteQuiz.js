@@ -61,32 +61,35 @@ class DeleteQuiz extends Component {
             <h1 className="App-title">Delete a Quiz</h1>
           </header>
 
-          <form onSubmit={this.handleSubmit}>
-            <table className="table-hover">
-              <thead>
-                <tr>
-                  <th>Select</th>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Genre</th>
-                </tr>
-              </thead>
-              <tbody>{this.state.data.map((item, key) =>
-                    <tr key = {key}>
-                        <td>
-                            <input type = "radio" value = {item.id} onChange = {this.handleChange} name = "group name"/>
-                        </td>
-                        <td>{item.id}</td>
-                        <td>{item.name}</td>
-                        <td>{item.genre}</td>
-                    </tr>
-                )}
-              </tbody>
-          </table>
-          <br></br>
-          <button type="submit" className="btn btn-default">Submit</button>
-        </form>
-        <br></br>
+          <div className="container">
+            <form onSubmit={this.handleSubmit}>
+              <br/>
+              <table className="table-hover">
+                <thead>
+                  <tr>
+                    <th>Select</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Genre</th>
+                  </tr>
+                </thead>
+                <tbody>{this.state.data.map((item, key) =>
+                      <tr key = {key}>
+                          <td>
+                              <input type = "radio" value = {item.id} onChange = {this.handleChange} name = "group name"/>
+                          </td>
+                          <td>{item.id}</td>
+                          <td>{item.name}</td>
+                          <td>{item.genre}</td>
+                      </tr>
+                  )}
+                </tbody>
+              </table>
+              <br></br>
+              <button type="submit" className="btn btn-default">Submit</button>
+            </form>
+            <br></br>
+          </div>
 
         { this.state.submitted && this.state.del_id['id'] != 0 &&
           <div>

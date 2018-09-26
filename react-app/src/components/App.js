@@ -12,6 +12,8 @@ import DeleteUser from './DeleteUser';
 import ViewQuizzes from './ViewQuizzes';
 import DeleteQuiz from './DeleteQuiz';
 import NewQuiz from './NewQuiz';
+import ModifyQuiz from './ModifyQuiz';
+import CreateQuestion from './CreateQuestion';
 
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
 
@@ -50,6 +52,7 @@ class App extends Component {
                     localStorage.getItem("type") == 1 ?
                       <ul className="nav navbar-nav navbar-right">
                         <li><Link to={'/NewQuiz'}>Create Quiz</Link></li>
+                        <li><Link to={'/ModifyQuiz'}>Modify Quiz</Link></li>
                         <li><Link to={'/DeleteQuiz'}>Delete Quiz</Link></li>
                         <li><Link to={'/ViewQuizzes'}>View Quizzes</Link></li>
                         <li><Link to={'/DeleteUser'}>Delete User</Link></li>
@@ -88,6 +91,8 @@ class App extends Component {
                  <Route exact path='/ViewQuizzes' component={ViewQuizzes}/>
                  <Route exact path='/DeleteQuiz' component={DeleteQuiz}/>
                  <Route exact path='/NewQuiz'component={NewQuiz}/>
+                 <Route exact path='/ModifyQuiz' component={ModifyQuiz}/>
+                 <Route exact path='/ModifyQuiz/:id/1' component={CreateQuestion}/>
             </Switch>
           </div>
         </Router>

@@ -61,35 +61,38 @@ class DeleteUser extends Component {
             <h1 className="App-title">Delete a User</h1>
           </header>
 
-          <form onSubmit={this.handleSubmit}>
-            <table className="table-hover">
-              <thead>
-                <tr>
-                  <th>Select</th>
-                  <th>ID</th>
-                  <th>Username</th>
-                  <th>Admin</th>
-                </tr>
-              </thead>
-              <tbody>{this.state.data.map((item, key) =>
-                    <tr key = {key}>
-                        <td>
-                          {
-                            item.username != localStorage.getItem("username") &&
-                            <input type = "radio" value = {item.id} onChange = {this.handleChange} name = "group name"/>
-                          }
-                        </td>
-                        <td>{item.id}</td>
-                        <td>{item.username}</td>
-                        <td>{item.type == 1 ? "YES" : "NO"}</td>
-                    </tr>
-                )}
-              </tbody>
-          </table>
-          <br></br>
-          <button type="submit" className="btn btn-default">Submit</button>
-        </form>
-        <br></br>
+          <div className="container">
+            <br/>
+            <form onSubmit={this.handleSubmit}>
+              <table className="table-hover">
+                <thead>
+                  <tr>
+                    <th>Select</th>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Admin</th>
+                  </tr>
+                </thead>
+                <tbody>{this.state.data.map((item, key) =>
+                      <tr key = {key}>
+                          <td>
+                            {
+                              item.username != localStorage.getItem("username") &&
+                              <input type = "radio" value = {item.id} onChange = {this.handleChange} name = "group name"/>
+                            }
+                          </td>
+                          <td>{item.id}</td>
+                          <td>{item.username}</td>
+                          <td>{item.type == 1 ? "YES" : "NO"}</td>
+                      </tr>
+                  )}
+                </tbody>
+              </table>
+              <br></br>
+              <button type="submit" className="btn btn-default">Submit</button>
+            </form>
+            <br></br>
+          </div>
 
         { this.state.submitted && this.state.del_id['id'] != 0 &&
           <div>

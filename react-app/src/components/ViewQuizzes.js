@@ -40,25 +40,29 @@ class ViewQuizzes extends Component {
             <h1 className="App-title">View All Quizzes</h1>
           </header>
 
-          <table className="table-hover">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Genre</th>
-              </tr>
-            </thead>
-            <tbody>{this.state.data.map(function(item, key) {
-                return (
-                    <tr key = {key}>
-                        <td>{item.id}</td>
-                        <td>{item.name}</td>
-                        <td>{item.genre}</td>
-                    </tr>
-                  )
-              })}
-            </tbody>
-        </table>
+          <div className="container">
+            <br/>
+            <table className="table-hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Genre</th>
+                </tr>
+              </thead>
+              <tbody>{this.state.data.map(function(item, key) {
+                  return (
+                      <tr key = {key}>
+                          <td>{item.id}</td>
+                          <td>{item.name}</td>
+                          <td>{item.genre}</td>
+                      </tr>
+                    )
+                })}
+              </tbody>
+            </table>
+          </div>
+          <br/><br/>
         </div>
       );
     } else {

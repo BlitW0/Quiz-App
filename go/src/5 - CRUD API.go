@@ -34,26 +34,63 @@ type Quiz struct {
 	Genre string `json:"genre"`
 }
 
+type Question struct {
+	ID   uint
+	Qid  uint   `gorm:"type:integer REFERENCES quizzes(id) ON DELETE CASCADE ON UPDATE CASCADE"`
+	Body string `gorm:"type:varchar(2000)"`
+}
+
+type Option struct {
+	ID        uint
+	Quid      uint   `gorm:"type:integer REFERENCES questions(id) ON DELETE CASCADE ON UPDATE CASCADE"`
+	Body      string `gorm:"type:varchar(2000)"`
+	IsCorrect bool
+}
+
+type Record struct {
+	ID    uint
+	Qid   uint `gorm:"type:integer REFERENCES quizzes(id)"`
+	Uid   uint `gorm:"type:integer REFERENCES users(id)"`
+	Score uint
+}
+
+type QJoin struct {
+	Qid      uint
+	QuesBody string
+	Op1      string
+	Op2      string
+	Op3      string
+	Op4      string
+	C1       bool
+	C2       bool
+	C3       bool
+	C4       bool
+}
+
 func main() {
 	db, err = gorm.Open("sqlite3", "./gorm.db")
+	db.Exec("PRAGMA foreign_keys = ON")
 	if err != nil {
 		fmt.Println(err)
 	}
 	defer db.Close()
 
 	// db.DropTableIfExists(&User{})
-	db.AutoMigrate(&Person{}, &User{}, &Quiz{})
+	db.AutoMigrate(&Person{}, &User{}, &Quiz{}, &Question{}, &Option{}, &Record{})
 
 	r := gin.Default()
 
 	r.GET("/users/", GetUsers)
 	r.POST("/users", CreateUser)
-	r.POST("/checkuser", GetUser)
+	r.POST("/checkuser", CheckUser)
 	r.DELETE("users/:id", DeleteUser)
 
 	r.GET("/getquizzes", GetQuizzes)
 	r.DELETE("/quiz/:id", DeleteQuiz)
 	r.POST("/addquiz", CreateQuiz)
+	r.GET("/quiz/:id", GetQuiz)
+
+	r.POST("/addques", CreateQues)
 
 	// r.GET("/people/", GetPeople) // Creating routes for each functionality
 	// r.GET("/people/:id", GetPerson)
@@ -126,7 +163,7 @@ func GetUsers(c *gin.Context) {
 	}
 }
 
-func GetUser(c *gin.Context) {
+func CheckUser(c *gin.Context) {
 	var user User
 	c.BindJSON(&user)
 
@@ -201,6 +238,48 @@ func CreateQuiz(c *gin.Context) {
 			c.Header("access-control-allow-origin", "*")
 			c.JSON(350, "")
 		}
+	}
+
+}
+
+func GetQuiz(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var quiz Quiz
+	if err := db.Where("id = ?", id).First(&quiz).Error; err != nil {
+		c.AbortWithStatus(404)
+		fmt.Println(err)
+	} else {
+		c.Header("access-control-allow-origin", "*") // Why am I doing this? Find out. Try running with this line commented
+		c.JSON(200, quiz)
+	}
+}
+
+func CreateQues(c *gin.Context) {
+	var inp QJoin
+	c.BindJSON(&inp)
+
+	fmt.Println(inp)
+
+	var temp Question
+	insques := Question{Body: inp.QuesBody, Qid: inp.Qid}
+	if err := db.Model(&Question{}).Where("body = ?", insques.Body).First(&temp).Error; err != nil {
+
+		db.Create(&insques)
+		insopts := Option{Quid: insques.ID, Body: inp.Op1, IsCorrect: inp.C1}
+		db.Create(&insopts)
+		insopts = Option{Quid: insques.ID, Body: inp.Op2, IsCorrect: inp.C2}
+		db.Create(&insopts)
+		insopts = Option{Quid: insques.ID, Body: inp.Op3, IsCorrect: inp.C3}
+		db.Create(&insopts)
+		insopts = Option{Quid: insques.ID, Body: inp.Op4, IsCorrect: inp.C4}
+		db.Create(&insopts)
+
+		c.Header("access-control-allow-origin", "*") // Why am I doing this? Find out. Try running with this line commented
+		c.JSON(200, &inp)
+	} else {
+
+		c.Header("access-control-allow-origin", "*")
+		c.JSON(350, "")
 	}
 
 }

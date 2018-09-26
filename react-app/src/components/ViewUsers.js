@@ -40,25 +40,30 @@ class ViewUsers extends Component {
             <h1 className="App-title">View All Users</h1>
           </header>
 
-          <table className="table-hover">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>Admin</th>
-              </tr>
-            </thead>
-            <tbody>{this.state.data.map(function(item, key) {
-                return (
-                    <tr key = {key}>
-                        <td>{item.id}</td>
-                        <td>{item.username}</td>
-                        <td>{item.type === 1 ? 'YES' : 'NO'}</td>
-                    </tr>
-                  )
-              })}
-            </tbody>
-        </table>
+          <div className="container">
+            <br/>
+            <table className="table-hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Username</th>
+                  <th>Admin</th>
+                </tr>
+              </thead>
+              <tbody>{this.state.data.map(function(item, key) {
+                  return (
+                      <tr key = {key}>
+                          <td>{item.id}</td>
+                          <td>{item.username}</td>
+                          <td>{item.type === 1 ? 'YES' : 'NO'}</td>
+                      </tr>
+                    )
+                })}
+              </tbody>
+            </table>
+          </div>
+          <br/><br/>
+        
         </div>
       );
     } else {
