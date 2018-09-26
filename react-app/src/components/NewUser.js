@@ -127,15 +127,6 @@ class NewUser extends Component {
           </div>
         }
 
-
-        {/* {
-          this.state.submitted === true &&
-          <div>
-            <br/>
-            Successfully registered. Please go to login page.
-          </div>
-        } */}
-
       </div>
     );
   }

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './DeletePerson.css';
 import Home from './Home';
-import Quizzes from './Quizzes';
 
 import { BrowserRouter as Route, Redirect } from 'react-router-dom';
 
@@ -106,8 +105,8 @@ class DeleteQuiz extends Component {
     } else {
       return (
         <div>
-          <Redirect to={'/Quizzes'}/>
-          <Route exact path='/Quizzes' component={Quizzes} />
+          <Redirect to={'/'}/>
+          <Route exact path='/' component={Home} />
         </div>
       );
     }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './NewPerson.css';
-import Quizzes from './Quizzes';
+import Home from './Home';
 
 import { BrowserRouter as Route, Redirect } from 'react-router-dom';
 
@@ -47,10 +47,6 @@ class Login extends Component {
 
             this.setState({authenticated: true, pass_wrong: false, not_found: false});
 
-            // Redirect to Quizzes page
-            // this.props.history.push('/Quizzes');
-            // window.location.reload();
-
           } else if (response.status == 350)
             this.setState({authenticated: false, pass_wrong: true, not_found: false,});
           else
@@ -74,8 +70,8 @@ class Login extends Component {
       window.location.reload();
       return (
         <div>
-          <Redirect to={'/Quizzes'}/>
-          <Route exact path='/Quizzes' component={Quizzes} />
+          <Redirect to={'/'}/>
+          <Route exact path='/' component={Home} />
         </div>
       );
     }

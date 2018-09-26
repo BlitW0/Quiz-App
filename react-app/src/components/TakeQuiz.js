@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './DeletePerson.css';
 import Home from './Home';
-import Quizzes from './Quizzes';
 
 import { BrowserRouter as Route, Redirect } from 'react-router-dom';
 
@@ -96,7 +95,7 @@ class TakeQuiz extends Component {
       })
         .then(response => {
           if(response.status >= 200 && response.status < 300)
-            this.props.history.push('/');
+            this.props.history.push('/ViewTaken');
         });
     }
   }
@@ -195,9 +194,9 @@ class TakeQuiz extends Component {
             <br/><br/>
 
             {
-              this.state.over == true &&
+              this.state.no_resp == true &&
               <div>
-                Finished.
+                Please choose an option.
               </div>
             }
 

@@ -326,11 +326,11 @@ func AddRecord(c *gin.Context) {
 	c.BindJSON(&inp)
 
 	var user User
-	fmt.Println(inp)
+	// fmt.Println(inp)
 	db.Where("username = ?", inp.Username).First(&user)
 
 	var tmp Record
-	if err = db.Joins("JOIN users ON users.id = records.uid").Joins("JOIN quizzes ON quizzes.id = records.qid").Where("records.uid = ?", user.ID).First(&tmp).Error; err == nil {
+	if err = db.Joins("JOIN users ON users.id = records.uid").Joins("JOIN quizzes ON quizzes.id = records.qid").Where("records.uid = ? AND records.qid = ?", user.ID, inp.Qid).First(&tmp).Error; err == nil {
 		c.Header("access-control-allow-origin", "*")
 		c.JSON(350, "")
 	} else {

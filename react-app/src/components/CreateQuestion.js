@@ -42,19 +42,12 @@ class CreateQuestion extends Component {
 
 
     if (this.state.formData.op1 != "" && this.state.formData.op2 != "" && this.state.formData.op3 != "" && this.state.formData.op4 != "") {
-
-      // console.log(this.state.formData.c1);
-      // console.log(this.state.formData.c2);
-      // console.log(this.state.formData.c3);
-      // console.log(this.state.formData.c4);
       if (this.state.formData.question_body != "" && (this.state.formData.c1 == true || this.state.formData.c2 == true || this.state.formData.c3 == true || this.state.formData.c4 == true)) {
 
 
         
 
         this.state.formData.qid = parseInt(this.props.match.params.id);
-        // console.log("sending.. ");
-        // console.log(JSON.stringify(this.state.formData));
 
         fetch('http://localhost:8080/addques', {
           method: 'POST',
